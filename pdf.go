@@ -1,8 +1,8 @@
 package xgpdf
 /*
-#cgo LDFLAGS: -L./ -l:libpdf.so
+#cgo LDFLAGS: -L./CLibBuild -l:libpdf.so
 #include <stdlib.h>
-#include "CPlugins/src/wrapper-pdf.h"
+#include "CLibBuild/wrapper-pdf.h"
 */
 import "C"
 import (
@@ -145,16 +145,15 @@ func continuousPDFWidget(winWidth, winHeight, pageHeight, xoffset int, title, pd
 	xgw.UniversalWidget(title, 0, 0, winWidth, winHeight, paint, button, keypress, refresh, init)
 }
 
-func main() {
-	action := os.Args
+func PDFWidget(args ...string) {
 	defer xgw.Cleanup()
-	if len(action) <= 1 { return }
-	if len(action) < 6 {
-		action = []string{action[1], "1750", "1600", "72", "46"}
+	if len(args) <= 1 { return }
+	if len(args) < 6 {
+		args = []string{args[1], "1750", "1600", "72", "46"}
 	}
-	pageWidth, winHeight, aspect, xoffset := xgw.ParseInt(action[1]), xgw.ParseInt(action[2]), xgw.ParseInt(action[3]), xgw.ParseInt(action[4])
+	pageWidth, winHeight, aspect, xoffset := xgw.ParseInt(args[1]), xgw.ParseInt(args[2]), xgw.ParseInt(args[3]), xgw.ParseInt(args[4])
 	if pageWidth < 100 { pageWidth = xgw.Width*7/10 }
 	if winHeight < 100 { winHeight = xgw.Height-40 }
 	if aspect < 1 { aspect = 80 }
-	continuousPDFWidget(pageWidth, winHeight, int(float64(pageWidth)*100.0/float64(aspect)), xoffset, "auto-pdf-" + filepath.Base(action[0]), action[0])
+	continuousPDFWidget(pageWidth, winHeight, int(float64(pageWidth)*100.0/float64(aspect)), xoffset, "auto-pdf-" + filepath.Base(args[0]), args[0])
 }
