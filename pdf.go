@@ -7,7 +7,6 @@ package xgpdf
 import "C"
 import (
 	"strings"
-	"os"
 	"unsafe"
 	"regexp"
 	"github.com/mocham/xgw"
